@@ -6,8 +6,11 @@ import ctrlPromise from './controllers/'
 const router = Router()
 ctrlPromise.then((ctrl) => {
   router
-  .get('/categories', ctrl.categories.readList)
   .post('/categories', ctrl.categories.create)
+  .get('/categories', ctrl.categories.readList)
+  .get('/categories/:id', ctrl.categories.readInstance)
+  .patch('/categories/:id', ctrl.categories.update)
+  .delete('/categories/:id', ctrl.categories.remove)
   .use('*', notFound)
   .use(err)
 })
