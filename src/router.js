@@ -1,9 +1,12 @@
 import { Router } from 'express'
-import ctrl from './controllers/'
+import ctrlPromise from './controllers/'
 
 const router = Router()
-.post('/categories', ctrl.categories.create)
-.get('/categories', ctrl.categories.readList)
-// .get('/categories', ctrl.categories.readInstance)
+ctrlPromise.then((ctrl) => {
+  router
+  .get('/categories', ctrl.categories.readList)
+  .post('/categories', ctrl.categories.create)
+})
+.catch((err) => console.log(err))
 
 export default router
