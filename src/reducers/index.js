@@ -8,3 +8,10 @@ export const reduceModules = (res, row) => {
   res['fun'] = row.fun
   return res
 }
+
+export const reduceModule = (res, row) => {
+  Object.keys(row.fun).forEach((key) => {
+    res[key] = row.fun[key]
+  })
+  return res
+}

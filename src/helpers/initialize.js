@@ -9,7 +9,7 @@ import fs from 'fs'
 import path from 'path'
 import Promise from 'bluebird'
 import { ERROR } from './responses'
-import { reduceExports, reduceModules } from '../reducers/'
+import { reduceExports, reduceModule, reduceModules } from '../reducers/'
 
 const filterFiles = (f) => !['index.js'].includes(f)
 
@@ -19,7 +19,7 @@ const getExport = (dir, file) => new Promise((resolve, reject) => {
   resolve({ filename, fun })
 })
 
-export const getDataModules = (moduleDir, reducer = reduceExports) => {
+export const getDataModules = (moduleDir, reducer = reduceModule) => {
   const files = fs.readdirSync(moduleDir).filter(filterFiles)
   return Promise.all(files.map((file) => getExport(moduleDir, file)))
   .then((responses) => responses.reduce(reducer, {}))
