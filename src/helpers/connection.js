@@ -3,9 +3,13 @@ import mongoose from 'mongoose'
 import mongooseMiddleware from '../middlewares/mongoose'
 import Promise from 'bluebird'
 
+import initialize from './initialize'
+
 const DISCONNECTED = 'Mongoose default connection disconnected'
 const ERROR = 'Mongoose default connection errors: '
 const OK = 'Mongoose connection open to mongodb://localhost/'
+
+initialize('models')
 
 const mongooseConnection = (dbName) => new Promise((resolve, reject) => {
   mongoose.connect('mongodb://localhost/' + dbName, (err) => {

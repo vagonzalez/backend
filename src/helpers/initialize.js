@@ -1,23 +1,44 @@
+/* Funciones que retorna todos los ficheros .js dentro de un modulo.
+ * pueden ser ficheros tipo controller o model.
+ * - Hay que recorrer todos los folders dentro de `modules`,
+ * - Recorrer los archivos del folder [`controllers` || `models`]
+ * - Ejemplo, Cargar los controllers:
+ * - modules >> [ categories, users (-index.js) ] >> [ files.js (-index.js) ]
+ */
 import fs from 'fs'
 import path from 'path'
 import Promise from 'bluebird'
+import { ERROR } from './responses'
 
-const getExport = (file, dir) => new Promise((resolve, reject) => {
-  let fileName = path.basename(file, '.js')
-  if (fileName !== 'index') {
-    let ctrl = require(dir + '/' + fileName)
-    resolve({ filename: fileName, ctrl: ctrl })
-  }
-  resolve(null)
+const filterFiles = (f) => !['index.js'].includes(f)
+
+const getExport = (dir, file) => new Promise((resolve, reject) => {
+  let filename = path.basename(file, '.js')
+  let fun = require(dir + '/' + filename)
+  resolve({ filename, fun })
 })
 
-export default (dir) => {
-  const files = fs.readdirSync(dir)
-  return Promise.all(files.map((file) => getExport(file, dir)))
-  .then((responses) =>
-    responses.reduce((response, row) => {
-      if (row !== null) response[row.filename] = row.ctrl
+const getDataModules = (moduleDir) => {
+  const files = fs.readdirSync(moduleDir).filter(filterFiles)
+  return Promise.all(files.map((file) => getExport(moduleDir, file)))
+  .then((responses) => {
+    return responses.reduce((response, row) => {
+      response['filename'] = row.filename
+      response['fun'] = row.fun
       return response
     }, {})
-  )
+  })
+}
+
+export default (kind = null) => {
+  if (!['controllers', 'models'].includes(kind)) return ERROR('controllers or models?')
+  const modulesDir = path.join(__dirname, '../modules/')
+  const modules = fs.readdirSync(modulesDir).filter(filterFiles)
+  return Promise.all(modules.map((module) => getDataModules(path.join(modulesDir, module, kind))))
+  .then((responses) => {
+    return responses.reduce((response, row) => {
+      response[row.filename] = row.fun
+      return response
+    }, {})
+  })
 }
