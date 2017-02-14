@@ -9,6 +9,7 @@ import fs from 'fs'
 import path from 'path'
 import Promise from 'bluebird'
 import { ERROR } from './responses'
+import { reduceExports, reduceModules } from '../reducers/'
 
 const filterFiles = (f) => !['index.js'].includes(f)
 
@@ -22,11 +23,7 @@ const getDataModules = (moduleDir) => {
   const files = fs.readdirSync(moduleDir).filter(filterFiles)
   return Promise.all(files.map((file) => getExport(moduleDir, file)))
   .then((responses) => {
-    return responses.reduce((response, row) => {
-      response['filename'] = row.filename
-      response['fun'] = row.fun
-      return response
-    }, {})
+    return responses.reduce(reduceModules, {})
   })
 }
 
@@ -35,10 +32,5 @@ export default (kind = null) => {
   const modulesDir = path.join(__dirname, '../modules/')
   const modules = fs.readdirSync(modulesDir).filter(filterFiles)
   return Promise.all(modules.map((module) => getDataModules(path.join(modulesDir, module, kind))))
-  .then((responses) => {
-    return responses.reduce((response, row) => {
-      response[row.filename] = row.fun
-      return response
-    }, {})
-  })
+  .then((responses) => responses.reduce(reduceExports, {}))
 }
