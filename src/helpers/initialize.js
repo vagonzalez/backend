@@ -19,18 +19,16 @@ const getExport = (dir, file) => new Promise((resolve, reject) => {
   resolve({ filename, fun })
 })
 
-const getDataModules = (moduleDir) => {
+export const getDataModules = (moduleDir, reducer = reduceExports) => {
   const files = fs.readdirSync(moduleDir).filter(filterFiles)
   return Promise.all(files.map((file) => getExport(moduleDir, file)))
-  .then((responses) => {
-    return responses.reduce(reduceModules, {})
-  })
+  .then((responses) => responses.reduce(reducer, {}))
 }
 
 export default (kind = null) => {
   if (!['controllers', 'models'].includes(kind)) return ERROR('controllers or models?')
   const modulesDir = path.join(__dirname, '../modules/')
   const modules = fs.readdirSync(modulesDir).filter(filterFiles)
-  return Promise.all(modules.map((module) => getDataModules(path.join(modulesDir, module, kind))))
+  return Promise.all(modules.map((module) => getDataModules(path.join(modulesDir, module, kind), reduceModules)))
   .then((responses) => responses.reduce(reduceExports, {}))
 }
