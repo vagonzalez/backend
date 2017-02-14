@@ -1,16 +1,22 @@
 import { Router } from 'express'
 
 import { err, notFound } from './middlewares/errors'
-import ctrlPromise from './controllers/'
+import controllers from './controllers/'
 
 const router = Router()
-ctrlPromise.then((ctrl) => {
+
+controllers.then((ctrls) => {
   router
-  .post('/categories', ctrl.categories.create)
-  .get('/categories', ctrl.categories.readList)
-  .get('/categories/:id', ctrl.categories.readInstance)
-  .patch('/categories/:id', ctrl.categories.update)
-  .delete('/categories/:id', ctrl.categories.remove)
+  // Categories
+  .post('/categories', ctrls.categories.create)
+  .get('/categories', ctrls.categories.readList)
+  .get('/categories/:id', ctrls.categories.readInstance)
+  .patch('/categories/:id', ctrls.categories.update)
+  .delete('/categories/:id', ctrls.categories.remove)
+  // Users
+  .post('/login', ctrls.users.auth)
+  .post('/register', ctrls.users.register)
+  // Errores & 404
   .use('*', notFound)
   .use(err)
 })
