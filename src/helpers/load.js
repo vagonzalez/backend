@@ -8,7 +8,7 @@
 import fs from 'fs'
 import path from 'path'
 import Promise from 'bluebird'
-import { ERROR } from './responses'
+import { ERROR } from './errors'
 import { reduceExports, reduceModule, reduceModules } from '../reducers/'
 
 const filterFiles = (f) => !['index.js'].includes(f)
@@ -16,6 +16,7 @@ const filterFiles = (f) => !['index.js'].includes(f)
 const getExport = (dir, file) => new Promise((resolve, reject) => {
   let filename = path.basename(file, '.js')
   let fun = require(dir + '/' + filename)
+  console.log({ filename, fun })
   resolve({ filename, fun })
 })
 
@@ -29,6 +30,8 @@ export default (kind = null) => {
   if (!['controllers', 'models'].includes(kind)) return ERROR('controllers or models?')
   const modulesDir = path.join(__dirname, '../modules/')
   const modules = fs.readdirSync(modulesDir).filter(filterFiles)
-  return Promise.all(modules.map((module) => getDataModules(path.join(modulesDir, module, kind), reduceModules)))
-  .then((responses) => responses.reduce(reduceExports, {}))
+  return Promise.all(modules.map((module) => getExport(path.join(modulesDir, module), `${kind}.js`)))
+  .then((responses) => { console.log(responses) })
+  // return Promise.all(modules.map((module) => getDataModules(path.join(modulesDir, module, kind), reduceModules)))
+  // .then((responses) => responses.reduce(reduceExports, {}))
 }
