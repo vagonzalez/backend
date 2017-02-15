@@ -1,7 +1,7 @@
 import boom from 'boom'
 import { sign } from './functions'
 
-export const auth = (req, res, next) =>
+const auth = (req, res, next) =>
   req.models.user.authenticate(req.body)
   .then((jwt) => res.json(jwt))
   .catch((err) => {
@@ -9,8 +9,10 @@ export const auth = (req, res, next) =>
     next(boom.wrap(err, 500))
   })
 
-export const register = (req, res, next) =>
+const register = (req, res, next) =>
   req.models.user.register(req.body)
   .then((user) => sign(user))
   .then((jwt) => res.json(jwt))
   .catch(err => next(boom.wrap(err, 400)))
+
+module.exports = { auth, register }

@@ -1,7 +1,7 @@
 import boom from 'boom'
 
 export const err = (err, req, res, next) => {
-  console.log(err)
+  // console.log(err)
   if (err.isBoom) {
     res.status(err.output.statusCode).send({...err.output.payload, errors: err.errors})
   } else {

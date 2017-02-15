@@ -21,11 +21,11 @@ UserSchema.pre('save', (next) => hashAsync(this.password, 10).then((hash) => { t
 UserSchema.statics.register = (data) => this.create(data)
 
 UserSchema.statics.authenticate = ({ password, email }) => {
-  if (!password || !email) return BAD_CREDENTIALS()
+  if (!password || !email) return BAD_CREDENTIALS
   return this.findOne({ email })
   .select('_id password username email').lean().exec()
-  .then((user) => user ? compare(user, password) : BAD_CREDENTIALS())
-  .then((user) => user ? signAsync(omit(user, ['password']), 'blackGoku', {}) : BAD_CREDENTIALS())
+  .then((user) => user ? compare(user, password) : BAD_CREDENTIALS)
+  .then((user) => user ? signAsync(omit(user, ['password']), 'blackGoku', {}) : BAD_CREDENTIALS)
 }
 
 export default mongoose.model('user', UserSchema, 'users')

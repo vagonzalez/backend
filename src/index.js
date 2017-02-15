@@ -5,7 +5,9 @@ import mongoose from 'mongoose'  // eslint-disable-line
 import morgan from 'morgan'
 
 import mongooseConnection from './helpers/connection'
-// import router from './router'
+import router from './router'
+
+console.log(router)
 
 const app = express()
 mongooseConnection('dev')
@@ -16,7 +18,7 @@ mongooseConnection('dev')
     .use(json())
     .use(mongoose.middleware)
     .use(morgan('dev'))
-    // .use('/', router)
+    .use('/', router)
     .listen(3000, () => console.log('http://localhost:3000/'))
   })
   .catch((err) => console.log(err))
