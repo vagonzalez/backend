@@ -19,9 +19,10 @@ const defaultRoutes = [{
   auth: null
 }]
 
+
 moduleRoutesCombiner().then(
   routes => {
-    routes.push(defaultRoutes)
+    //routes.push(defaultRoutes) // Añade las rutas por defecto
     routes.map(route => {
       if (Array.isArray(route)) {
         route.map(r => {
@@ -35,6 +36,7 @@ moduleRoutesCombiner().then(
       } else {
         console.log(chalk.red.bold('## vRouter: invalid route', JSON.stringify(route)))
       }
+      vRouter.use('*', notFound)
     })
   }
 ).catch(error => console.log(chalk.red.bold(`## vRouter error: ${error}`)))
