@@ -1,4 +1,7 @@
 import Promise from 'bluebird'
 
-export const ERROR = (msg) => Promise.reject(new Error(msg))
-export const BAD_CREDENTIALS = () => ERROR('Bad Credentials')
+const ERROR = (msg) => Promise.reject(new Error(msg))
+const BAD_CREDENTIALS = () => ERROR('Bad Credentials')
+const BAD_REQUEST = () => ERROR('Bad request')
+
+module.exports = { ERROR, BAD_CREDENTIALS, BAD_REQUEST }
