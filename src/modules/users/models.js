@@ -1,6 +1,3 @@
-/*
- * Los agentes inmobiliarios son los usuarios de nuestro sistema.
- */
 import { BAD_CREDENTIALS } from '../../helpers/errors'
 import { compare, hashAsync, signAsync } from './functions'
 import isEmail from 'validator/lib/isEmail'
@@ -16,16 +13,24 @@ const UserSchema = Schema({
   phone: String
 }, { timestamps: true })
 
-UserSchema.pre('save', (next) => hashAsync(this.password, 10).then((hash) => { this.password = hash }))
+UserSchema.pre('save', function (next) {
+  hashAsync(this.password, 10)
+  .then((hash) => {
+    this.password = hash
+    next()
+  })
+})
 
-UserSchema.statics.register = (data) => this.create(data)
-
-UserSchema.statics.authenticate = ({ password, email }) => {
+UserSchema.statics.authenticate = function ({ password, email }) {
   if (!password || !email) return BAD_CREDENTIALS
   return this.findOne({ email })
   .select('_id password username email').lean().exec()
   .then((user) => user ? compare(user, password) : BAD_CREDENTIALS)
   .then((user) => user ? signAsync(omit(user, ['password']), 'blackGoku', {}) : BAD_CREDENTIALS)
+}
+
+UserSchema.statics.register = function (data) {
+  return this.create(data)
 }
 
 export default mongoose.model('user', UserSchema, 'users')

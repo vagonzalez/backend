@@ -25,10 +25,12 @@ export const getDataModules = (moduleDir, reducer = reduceModule) => {
   .then((responses) => responses.reduce(reducer, {}))
 }
 
-export default (kind = null) => {
+const loader = (kind = null) => {
   if (!['controllers', 'models'].includes(kind)) return ERROR('controllers or models?')
   const modulesDir = path.join(__dirname, '../modules/')
   const modules = fs.readdirSync(modulesDir).filter(filterFiles)
   return Promise.all(modules.map((module) => getExport(path.join(modulesDir, module), `${kind}.js`)))
   .then((responses) => responses.reduce(reduceExports, {}))
 }
+
+module.exports = loader

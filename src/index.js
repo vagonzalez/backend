@@ -4,10 +4,11 @@ import express from 'express'
 import mongoose from 'mongoose'  // eslint-disable-line
 import morgan from 'morgan'
 
+import loader from './helpers/loader'
 import mongooseConnection from './helpers/connection'
 import router from './router'
 
-console.log(router)
+loader('models')
 
 const app = express()
 mongooseConnection('dev')
