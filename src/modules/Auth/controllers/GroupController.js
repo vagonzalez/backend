@@ -1,6 +1,5 @@
-import models from '../models'
 import genericControllerFactory from '../../../router/GenericControllerFactory'
 
-const ctrl = genericControllerFactory(models, 'Group')
+const ctrl = genericControllerFactory('Group')
 
 export default ctrl
