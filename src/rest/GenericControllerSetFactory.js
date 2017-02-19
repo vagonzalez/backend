@@ -24,7 +24,7 @@ const update = (modelName) => (req, res, next) => {
   req.models[modelName].findOneAndUpdate(
     { _id: req.params.id },
     req.params.data,
-    { new: true}
+    { new: true }
   ).exec()
     .then(obj => res.json(obj))
     .catch(err => next(boom.wrap(err, 500)))
@@ -38,12 +38,11 @@ const remove = (modelName) => (req, res, next) => {
 
 const genericControllerSetFactory = (modelName) => ({
   model: modelName,
-  list: list(modelName),
-  retrieve: retrieve(modelName),
-  create: retrieve(modelName),
-  update: update(modelName),
-  remove: remove(modelName),
+  create: create(modelName),      // C
+  list: list(modelName),          // R
+  retrieve: retrieve(modelName),  // R
+  update: update(modelName),      // U
+  remove: remove(modelName)       // D
 })
-
 
 export default genericControllerSetFactory
