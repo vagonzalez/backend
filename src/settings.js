@@ -5,11 +5,11 @@ const settings = {
   port: 3000,
   debug: true,
   db: {
-    user: 'air-stats',
+    db: 'air-stats',
     password: 'air-stats',
-    db:'air-stats',
-    server: 'localhost',
     port: '27017',
+    server: 'localhost',
+    user: 'air-stats'
   }
 }
 
