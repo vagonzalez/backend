@@ -1,8 +1,9 @@
 import { Router } from 'express'
 
 import { err, notFound } from '../middlewares/errors'
-import categories from '../modules/categories/routes'
 
+//import categories from '../modules/categories/routes'
+/*
 
 const router = Router()
   .use(categories)
@@ -10,3 +11,4 @@ const router = Router()
   .use(err)
 
 export default router
+*/
