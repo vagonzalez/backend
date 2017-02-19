@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import Promise from 'bluebird'
 import chalk from 'chalk'
+import settings from '../settings'
 
 // Combina arrays
 export const combineArrays = (...routes) => Array.prototype.concat(...routes)
@@ -23,7 +24,7 @@ const getExport = (file, dir) => new Promise((resolve, reject) => {
 
 
 // Combina las rutas de cada módulo en un array de rutas para ser procesadas
-// y entregadas al router de express... Ojo, no considero el módulo categories
+// y entregadas al router de express
 export const moduleRoutesCombiner = () => {
 
   // Obtiene los directorios dentro del 'modules'
