@@ -9,11 +9,9 @@ const r = new RouterHelper(true)
 // mantiene flexibilidad para agregar otro tipo de rutas a controladores
 // especiales
 
-// Se podrá hacer r.addGenericRoutes('user', controllers.User)
-// Que generaría las rutas para un CRUD: get /users post /user patch /user ...
 
-r.addRoute('get', '/users', controllers.Users.list)
-r.addRoute('get', '/groups', controllers.Groups.list)
+r.addRoutesFromGeneric(controllers.Users)
+r.addRoutesFromGeneric(controllers.Groups)
 
 
 export default r.getRoutes()

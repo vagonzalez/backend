@@ -1,4 +1,4 @@
-import genericControllerFactory from '../../../router/GenericControllerFactory'
+import genericControllerFactory from '../../../rest/GenericControllerSetFactory'
 
 // Genera un controller que incluye varias funcionalides básicas de CRUD
 // en este caso para el modelo User

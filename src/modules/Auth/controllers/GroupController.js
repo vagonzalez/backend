@@ -1,4 +1,4 @@
-import genericControllerFactory from '../../../router/GenericControllerFactory'
+import genericControllerFactory from '../../../rest/GenericControllerSetFactory'
 
 const ctrl = genericControllerFactory('Group')
 
