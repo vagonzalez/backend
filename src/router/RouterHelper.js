@@ -19,6 +19,16 @@ class RouterHelper {
     }
   }
 
+  addRoutesFromGeneric = (genericController, auth = null) => {
+    const model = genericController.model.toLowerCase()
+
+    this.addRoute('get', `/${model}s`, genericController.list, auth)
+    this.addRoute('get', `/${model}/:id`, genericController.retrieve, auth)
+    this.addRoute('post', `/${model}/:id`, genericController.create, auth)
+    this.addRoute('patch', `/${model}/:id`, genericController.update, auth)
+    this.addRoute('delete', `/${model}/:id`, genericController.remove, auth)
+  }
+
   getRoutes = () => (R.clone(this.routes))
 
 }
