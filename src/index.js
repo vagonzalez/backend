@@ -7,7 +7,7 @@ import morgan from 'morgan'
 import authentication from './middlewares/AuthenticationMiddleware'
 import SettingsMiddleware from './middlewares/SettingsMiddleware'
 import mongooseConnection from './helpers/connection'
-import { vRouter, router } from './router'
+import { vRouter } from './router'
 import settings from './settings'
 
 const app = express()
