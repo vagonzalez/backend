@@ -7,7 +7,7 @@ import morgan from 'morgan'
 import authentication from './middlewares/AuthenticationMiddleware'
 import SettingsMiddleware from './middlewares/SettingsMiddleware'
 import mongooseConnection from './helpers/connection'
-import { vRouter } from './router'
+import { router } from './router'
 import settings from './settings'
 
 const app = express()
@@ -19,12 +19,13 @@ mongooseConnection(settings.db)
     .use(urlencoded({ extended: false }))
     .use(json())
     .use(SettingsMiddleware())
+    .use(MessageMiddleware(settings))
     .use(authentication(true))
     .use(mongoose.middleware)
     .use(morgan('dev'))
-    .use('/', vRouter)
-    .listen(3000, () => {
-      console.log('http://localhost:3000/')
+    .use('/', router)
+    .listen(settings.port, () => {
+      console.log(`http://localhost:${settings.port}/`)
     })
   })
   .catch((err) => console.log(err))
